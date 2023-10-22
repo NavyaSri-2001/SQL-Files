@@ -1,0 +1,114 @@
+/*CREATE TABLE EmployeeData
+(ID int,
+ FirstName varchar(50),
+ LastName varchar(50),
+ Age int,
+ Gender varchar(50));
+INSERT INTO EmployeeData Values
+(11,'','chand',30,'M');*/
+/*
+SELECT *
+FROM EmployeeData;*/
+/*
+CREATE TABLE EmployeeSalary
+(ID int,
+ JobTitle varchar(10),
+ Salary int);
+ INSERT INTO EmployeeSalary VALUES
+ (15,'musician',100000);*/
+ /*
+ SELECT *
+ FROM EmployeeSalary
+ INNER JOIN EmployeeData ON EmployeeData.ID= EmployeeSalary.ID;
+ INSERT INTO EmployeeSalary VALUES
+ (10,'cheff',40000);*/
+ /*
+ SELECT EmployeeSalary.ID, firstname, Salary, JobTitle
+ FROM EmployeeData
+ FULL OUTER JOIN EmployeeSalary ON EmployeeData.ID = EmployeeSalary.ID
+ WHERE firstname <> 'nava'
+ ORDER BY salary DESC*/
+ SELECT  jobtitle, avg(salary)
+ FROM EmployeeData
+ INNER JOIN EmployeeSalary ON EmployeeData.ID=EmployeeSalary.ID
+ WHERE jobtitle='software'
+  
+ //UNION
+SELECT ID, firstname, age
+FROM EmployeeData
+UNION
+SELECT *
+FROM EmployeeSalary
+
+//UNION ALL
+SELECT ID, firstname, age
+FROM EmployeeData
+UNION ALL
+SELECT *
+FROM EmployeeSalary
+ORDER BY id
+
+/*CASE STATEMENT*/
+
+SELECT firstname, jobtitle, salary,
+CASE 
+WHEN jobtitle='clerk' THEN salary+(salary*.01)
+WHEN jobtitle='cheff' THEN salary+(salary*.02)
+ELSE salary+(salary*.03)
+END AS NewSalary
+FROM EmployeeData
+INNER JOIN EmployeeSalary ON EmployeeData.ID=EmployeeSalary.ID;
+
+//HAVING CLAUSE 
+SELECT jobtitle, salary, avg(salary) AS AvgSalary
+FROM EmployeeData
+INNER JOIN EmployeeSalary ON EmployeeData.ID=EmployeeSalary.ID
+GROUP BY jobtitle
+HAVING AvgSalary >=10000
+ORDER BY AvgSalary DESC
+
+/*
+UPDATE EmployeeData
+SET ID =20
+WHERE ID =1;
+
+SELECT *
+FROM EmployeeData;
+
+DELETE FROM EmployeeData
+WHERE ID=6;
+
+
+SELECT *
+FROM EmployeeData;*/
+
+/*
+--Alias on cloumns
+SELECT (firstname || ' ' || lastname) AS fullname
+FROM EmployeeData;
+
+-- Alias on table
+SELECT data.ID, sal.salary
+FROM EmployeeData AS data 
+JOIN EmployeeSalary AS sal ON data.ID=sal.ID;*/
+
+
+--partition by clause allows to have multiple column details 
+SELECT firstname,gender,salary, 
+COUNT(GENDER) OVER (PARTITION BY gender) AS GenderCount
+FROM EmployeeData data
+JOIN EmployeeSalary  sal ON data.ID=sal.id;
+
+-- to find out difference b/w group by and partition by
+SELECT Gender, COUNT(gender)
+FROM EmployeeData data
+JOIN EmployeeSalary sal ON data.ID=sal.id
+GROUP BY gender;
+
+SELECT salary, COUNT(salary)
+OVER (PARTITION BY salary)
+FROM EmployeeSalary;
+
+ 
+
+ 

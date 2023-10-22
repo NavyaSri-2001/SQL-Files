@@ -1,0 +1,129 @@
+/*
+--CTE (Common Table Expression)
+WITH CTE_EMPLOYEE AS 
+(SELECT firstname,gender,salary, 
+COUNT(GENDER) OVER (PARTITION BY gender) AS GenderCount
+FROM EmployeeData data
+JOIN EmployeeSalary  sal ON data.ID=sal.id)
+SELECT *
+FROM CTE_EMPLOYEE
+*/
+--Temp table
+/*
+CREATE TEMP TABLE EmpDetails(
+ID int, 
+jobtitle varchar(10),
+salary int)
+INSERT INTO EmpDetails VALUES
+(1,'HR',100000),(2,'SOFTWARE',1000000)*/
+/*
+INSERT INTO EmpDetails
+SELECT * 
+FROM EmployeeSalary;
+SELECT *
+FROM EmpDetails;*/
+/*
+--drop table if exists employeeDetails2
+CREATE TEMP TABLE IF NOT EXISTS employeeDetails2
+(jobtitle varchar(10), avgAge int, avgSalary int, JobTitleCount int);
+INSERT INTO employeeDetails2 
+SELECT jobtitle,AVG(age), AVG(salary),COUNT(jobtitle)
+FROM EmployeeData ed
+JOIN EmployeeSalary sal ON ed.ID=sal.ID;
+--GROUP BY jobtitle;
+SELECT *
+FROM employeeDetails2;
+*/
+
+--String functions
+/*
+CREATE TABLE IF NOT EXISTS EmployeeErrors
+(ID varchar(20),
+ firstname varchar(20),
+ lastname varchar(20));
+ INSERT INTO EmployeeErrors VALUES
+ ('1001  ','jimbo', 'hast'),
+ ('  1002', 'jack','hat'),
+ ('1003', 'jeff','jerit-jen');
+ SELECT *
+ FROM EmployeeErrors;
+ 
+--TRIM
+SELECT ID, TRIM(ID) AS TRIMID
+FROM EmployeeErrors;
+
+--LEFT TRIM
+SELECT ID, LTRIM(ID) AS TRIMID
+FROM EmployeeErrors;
+
+--RIGHT TRIM
+SELECT ID, RTRIM(ID) AS TRIMID
+FROM EmployeeErrors;
+
+insert into EmployeeErrors VALUES
+('		1005','jenn','jack');
+SELECT ID
+FROM EmployeeErrors;
+
+--REPLACE
+SELECT LastName, REPLACE(LastName, '-jen','') AS LastNameFixed
+FROM EmployeeErrors;*/
+
+--SUBSTRING (can be useful for fuzzy matching)
+/*
+CREATE TABLE IF NOT EXISTS EmployeeErrors2
+(ID varchar(20),
+ firstname varchar(20),
+ lastname varchar(20));
+ INSERT INTO EmployeeErrors2 VALUES
+ ('1001  ','jim', 'hastth'),
+ ('  1002', 'jackie','hatoy'),
+ ('1003', 'jeffbezoz','jeb');
+ 
+SELECT ee1.firstname, SUBSTRING(ee1.firstname,1,3), ee2.firstname, SUBSTRING(ee2.firstname,1,3)
+FROM EmployeeErrors ee1
+JOIN EmployeeErrors2 ee2 ON SUBSTRING(ee1.firstname,1,3) = SUBSTRING(ee2.firstname,1,3);
+
+SELECT ee1.lastname, SUBSTRING(ee1.lastname,1,3), ee2.firstname, SUBSTRING(ee2.lastname,1,3)
+FROM EmployeeErrors ee1
+JOIN EmployeeErrors2 ee2 ON SUBSTRING(ee1.lastname,1,2) = SUBSTRING(ee2.lastname,1,2);
+
+--UPPER and LOWER
+INSERT 	into EmployeeErrors VALUES
+('1004','JEFF','JIN'),('1005','TOby','red');
+SELECT firstname, LOWER(firstname)
+FROM EmployeeErrors;
+SELECT firstname, UPPER(firstname)
+FROM EmployeeErrors;*/
+
+/*
+CREATE PROCEDURE TEST AS
+SELECT *
+FROM EmployeeErrors;
+
+EXEC TEST*/
+
+--SUBQUERY IN SELECT
+/*
+INSERT INTO EmployeeSalary VALUES
+(1,'CHEFF',10000),(2,'software',100000),(3,'hr',45000);
+SELECT *
+FROM EmployeeSalary;
+
+SELECT jobtitle,salary, (SELECT AVG(salary) FROM EmployeeSalary) AS ALLAVGSALARY
+FROM EmployeeSalary;
+
+--SUBQUERY IN FROM
+SELECT a.ID, id
+FROM (SELECT id, jobtitle,salary, AVG(salary) OVER() FROM EmployeeSalary) a;*/
+
+--SUBQUERY IN WHERE
+SELECT  sal.id, jobtitle,salary, age
+FROM EmployeeSalary sal
+JOIN EmployeeData ed ON ed.id= sal.id
+WHERE sal.ID IN (SELECT ID
+             FROM EmployeeData
+            WHERE AGE >30)
+
+
+ 

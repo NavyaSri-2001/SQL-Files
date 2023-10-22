@@ -1,0 +1,49 @@
+/*CREATE TABLE EmployeeData2
+(ID int,
+ FirstName varchar(50),
+ LastName varchar(50),
+ Age int,
+ Gender varchar(50),
+Place varchar(50))
+INSERT INTO EmployeeData Values
+(1,'nava','sri',22,'F');*/
+
+/*INSERT INTO EmployeeData2 Values
+(1,'Nagi','Suresh',23,'M', 'Ahmedabad');
+
+SELECT COUNT(Age) AS Age_Count
+FROM EmployeeData;
+
+SELECT *
+FROM EmployeeData2
+WHERE FirstName IN('nava', ' ');
+
+SELECT *
+FROM EmployeeData2
+WHERE FirstName LIKE 'N%';
+
+SELECT ID
+FROM EmployeeData2
+WHERE FirstName is not NULL;*/
+
+SELECT GENDER, COUNT(GENDER)
+FROM EmployeeData2
+WHERE AGE >2
+GROUP BY FirstName;
+
+select distinct(gender), count(gender)
+from employeedata2;
+
+SELECT *
+FROM EMPLOYEEDATA2
+ORDER BY 4 DESC, 5 DESC;
+
+//Instead of TOP command we should use LIMIT command to get data of only certain top number of rows. TOP is not supported by all databases, Oracle has another syntax for TOP. LIMIT is used in MYSQL Database
+
+ SELECT  *
+ FROM EmployeeData
+LIMIT 5
+
+
+
+ 
